@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario – Peluquería</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="./theme.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-title">Calendario de citas</div>
+      <div class="brand-subtitle">Vista mensual · pulsa un día para ver citas</div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" aria-label="Abrir menú" onclick="document.body.classList.add('drawer-open')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3a9 9 0 100 18 9 9 0 010-18z" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <div class="system-time" id="systemTime" aria-live="polite">--:--:--</div>
+      <div class="system-status"><span class="status-dot ok"></span><span class="status-text">OK</span></div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section class="card">
+      <div class="card-header">
+        <h2 id="monthTitle">Mes</h2>
+        <div>
+          <button class="icon-btn" id="prevMonth" title="Mes anterior">◀</button>
+          <button class="icon-btn" id="nextMonth" title="Mes siguiente">▶</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2>Citas del día <span id="selectedDateLabel"></span></h2>
+      </div>
+      <div class="card-body table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Hora</th><th>Cliente</th><th>Servicio</th><th>Canal</th><th>Estado</th><th>Importe</th>
+            </tr>
+          </thead>
+          <tbody id="dayAppointments"><tr class="placeholder"><td colspan="6">Selecciona un día</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer-overlay" onclick="document.body.classList.remove('drawer-open')"></div>
+  <aside class="drawer">
+    <div class="drawer-header">
+      <div class="drawer-title">Navegación</div>
+      <button class="icon-btn" aria-label="Cerrar" onclick="document.body.classList.remove('drawer-open')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <nav class="drawer-nav">
+      <a class="drawer-link" href="./index.html">Dashboard</a>
+      <a class="drawer-link active" href="./calendario.html">Calendario de citas</a>
+      <a class="drawer-link" href="./campanias.html">Campañas de marketing</a>
+      <a class="drawer-link" href="./historial.html">Historial de cambios</a>
+    </nav>
+  </aside>
+
+  <script src="./pages-calendar.js"></script>
+</body>
+</html>

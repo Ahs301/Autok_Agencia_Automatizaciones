@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peluquería – Panel de control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="./theme.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-title">Peluquería Alberto – Panel de control</div>
+      <div class="brand-subtitle">Sistema automatizado de reservas y campañas</div>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" id="openPanelBtn" aria-label="Abrir menú" title="Abrir menú" onclick="document.body.classList.add('drawer-open')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3a9 9 0 100 18 9 9 0 010-18z" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </button>
+      <div class="system-time" id="systemTime" aria-live="polite">--:--:--</div>
+      <div class="system-status" id="systemStatus">
+        <span class="status-dot neutral"></span>
+        <span class="status-text">Cargando…</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section class="kpis" id="kpiSection" aria-busy="true">
+      <div class="kpi-card">
+        <div class="kpi-title">CITAS HOY</div>
+        <div class="kpi-value" id="kpiCitasHoy">--</div>
+        <div class="kpi-sub" id="kpiCitasHoySub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">CITAS SEMANA</div>
+        <div class="kpi-value" id="kpiCitasSemana">--</div>
+        <div class="kpi-sub" id="kpiCitasSemanaSub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">CANCELACIONES SEMANA</div>
+        <div class="kpi-value" id="kpiCancelacionesSemana">--</div>
+        <div class="kpi-sub" id="kpiCancelacionesSemanaSub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">% CANCELACIÓN</div>
+        <div class="kpi-value" id="kpiPorcentajeCancelacion">--</div>
+        <div class="kpi-sub" id="kpiPorcentajeCancelacionSub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">INGRESOS SEMANA</div>
+        <div class="kpi-value" id="kpiIngresosSemana">--</div>
+        <div class="kpi-sub" id="kpiIngresosSemanaSub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">OCUPACIÓN</div>
+        <div class="kpi-value" id="kpiOcupacion">--</div>
+        <div class="kpi-sub" id="kpiOcupacionSub"></div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h2>Citas por día (últimos 14 días)</h2>
+        </div>
+        <div class="card-body">
+          <canvas id="chartCitasPorDia" height="140"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2>Servicios más solicitados</h2>
+        </div>
+        <div class="card-body">
+          <canvas id="chartServicios" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="single-col">
+      <div class="card">
+        <div class="card-header">
+          <h2>Alertas recientes</h2>
+          <a class="btn btn-primary" href="./historial.html" title="Ver historial completo">Ver historial</a>
+        </div>
+        <div class="card-body list" id="alertasList" aria-busy="true">
+          <div class="placeholder">Cargando alertas…</div>
+        </div>
+      </div>
+    </section>
+    <!-- Contenedores ocultos para mantener compatibilidad con scripts existentes -->
+    <section hidden>
+      <div id="proximasCitasWrap" aria-busy="false">
+        <table hidden>
+          <tbody id="proximasCitasTbody"></tbody>
+        </table>
+      </div>
+      <div id="campaniasList"></div>
+    </section>
+  </main>
+
+  <div id="errorBar" class="error-bar" hidden>Error al cargar datos</div>
+
+  <!-- Drawer lateral derecho -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="document.body.classList.remove('drawer-open')"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-title">Navegación</div>
+      <button class="icon-btn" aria-label="Cerrar" onclick="document.body.classList.remove('drawer-open')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="drawer-nav">
+      <a class="drawer-link active" href="./index.html">Dashboard</a>
+      <a class="drawer-link" href="./calendario.html">Calendario de citas</a>
+      <a class="drawer-link" href="./campanias.html">Campañas de marketing</a>
+      <a class="drawer-link" href="./historial.html">Historial de cambios</a>
+    </nav>
+  </aside>
+
+  <script src="./main.js"></script>
+</body>
+</html>
