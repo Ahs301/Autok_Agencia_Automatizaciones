@@ -51,7 +51,7 @@ let charts = { citas: null, servicios: null };
 
 async function fetchDashboardData() {
   // Reemplaza TU_N8N_URL por tu dominio de n8n
-  const url = 'https://TU_N8N_URL/webhook/dashboard-peluqueria';
+  const url = 'https://api.buybetter.cfd/webhook/dashboard';
   const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const data = await res.json();
